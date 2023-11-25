@@ -11,6 +11,8 @@
 		B74F12042B11C6E50033C02A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74F12032B11C6E50033C02A /* ContentView.swift */; };
 		B74F12062B11C6E60033C02A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12052B11C6E60033C02A /* Assets.xcassets */; };
 		B74F120A2B11C6E60033C02A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12092B11C6E60033C02A /* Preview Assets.xcassets */; };
+		B7C6C9D82B129F0400D07A44 /* libcreature_creator_pipelines.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */; };
+		B7C6C9DE2B12A10D00D07A44 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9DD2B12A10D00D07A44 /* Counter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,18 @@
 		B74F12052B11C6E60033C02A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B74F12072B11C6E60033C02A /* CreatureCreator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CreatureCreator.entitlements; sourceTree = "<group>"; };
 		B74F12092B11C6E60033C02A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B74F12122B11CA680033C02A /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
+		B74F12142B11CA680033C02A /* lib.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lib.rs; sourceTree = "<group>"; };
+		B74F12242B11CBE50033C02A /* xcode-cargo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "xcode-cargo.sh"; sourceTree = "<group>"; };
+		B74F14AF2B11CBE50033C02A /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
+		B7C6C9CE2B129D4900D07A44 /* counter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = counter.h; sourceTree = "<group>"; };
+		B7C6C9CF2B129D6300D07A44 /* counter.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = counter.rs; sourceTree = "<group>"; };
+		B7C6C9D12B129D8500D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = target/debug/libcreature_creator_pipelines.a; sourceTree = "<group>"; };
+		B7C6C9D32B129E4200D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-darwin/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
+		B7C6C9D52B129E7700D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-ios/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
+		B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-ios-sim/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
+		B7C6C9D92B12A0D100D07A44 /* CreatureCreator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CreatureCreator-Bridging-Header.h"; sourceTree = "<group>"; };
+		B7C6C9DD2B12A10D00D07A44 /* Counter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7C6C9D82B129F0400D07A44 /* libcreature_creator_pipelines.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,8 +51,12 @@
 		B74F11F52B11C6E50033C02A = {
 			isa = PBXGroup;
 			children = (
+				B74F12112B11CA680033C02A /* CreatureCreatorPipelines */,
 				B74F12002B11C6E50033C02A /* CreatureCreator */,
+				B74F12242B11CBE50033C02A /* xcode-cargo.sh */,
+				B74F14AF2B11CBE50033C02A /* Cargo.toml */,
 				B74F11FF2B11C6E50033C02A /* Products */,
+				B7C6C9D02B129D8500D07A44 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,6 +76,8 @@
 				B74F12052B11C6E60033C02A /* Assets.xcassets */,
 				B74F12072B11C6E60033C02A /* CreatureCreator.entitlements */,
 				B74F12082B11C6E60033C02A /* Preview Content */,
+				B7C6C9D92B12A0D100D07A44 /* CreatureCreator-Bridging-Header.h */,
+				B7C6C9DD2B12A10D00D07A44 /* Counter.swift */,
 			);
 			path = CreatureCreator;
 			sourceTree = "<group>";
@@ -69,6 +90,36 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		B74F12112B11CA680033C02A /* CreatureCreatorPipelines */ = {
+			isa = PBXGroup;
+			children = (
+				B74F12122B11CA680033C02A /* Cargo.toml */,
+				B74F12132B11CA680033C02A /* src */,
+			);
+			path = CreatureCreatorPipelines;
+			sourceTree = "<group>";
+		};
+		B74F12132B11CA680033C02A /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B7C6C9CF2B129D6300D07A44 /* counter.rs */,
+				B7C6C9CE2B129D4900D07A44 /* counter.h */,
+				B74F12142B11CA680033C02A /* lib.rs */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		B7C6C9D02B129D8500D07A44 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */,
+				B7C6C9D52B129E7700D07A44 /* libcreature_creator_pipelines.a */,
+				B7C6C9D32B129E4200D07A44 /* libcreature_creator_pipelines.a */,
+				B7C6C9D12B129D8500D07A44 /* libcreature_creator_pipelines.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -76,6 +127,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B74F120D2B11C6E60033C02A /* Build configuration list for PBXNativeTarget "CreatureCreator" */;
 			buildPhases = (
+				B74F16D82B11CFE50033C02A /* ShellScript */,
 				B74F11FA2B11C6E50033C02A /* Sources */,
 				B74F11FB2B11C6E50033C02A /* Frameworks */,
 				B74F11FC2B11C6E50033C02A /* Resources */,
@@ -101,6 +153,7 @@
 				TargetAttributes = {
 					B74F11FD2B11C6E50033C02A = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -134,6 +187,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		B74F16D82B11CFE50033C02A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "${SRCROOT}/xcode-cargo.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B74F11FA2B11C6E50033C02A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -141,6 +215,7 @@
 			files = (
 				B74F12042B11C6E50033C02A /* ContentView.swift in Sources */,
 				B74F12022B11C6E50033C02A /* CreatureCreatorApp.swift in Sources */,
+				B7C6C9DE2B12A10D00D07A44 /* Counter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +259,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -245,7 +320,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -266,6 +341,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CreatureCreator/CreatureCreator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -287,6 +363,22 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios/debug",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios/release",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios-sim/debug",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios-sim/release",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-darwin/debug",
+					"$(PROJECT_DIR)/target/aarch64-apple-darwin/release",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.superb.CreatureCreator;
@@ -294,6 +386,8 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "CreatureCreator/CreatureCreator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -304,6 +398,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CreatureCreator/CreatureCreator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -325,6 +420,19 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios/release",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-ios-sim/release",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/target/aarch64-apple-darwin/release",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.superb.CreatureCreator;
@@ -332,6 +440,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "CreatureCreator/CreatureCreator-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
