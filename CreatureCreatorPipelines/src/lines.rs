@@ -2,8 +2,8 @@ use std::mem::size_of;
 
 use metal::{DeviceRef, MTLPixelFormat, MTLPrimitiveType, MTLVertexFormat, MTLVertexStepFunction, NSUInteger, RenderCommandEncoderRef, RenderPipelineDescriptor, RenderPipelineState, VertexAttributeDescriptor, VertexBufferLayoutDescriptor, VertexDescriptor};
 use nalgebra::{point, Point3, vector};
-use crate::plane::Plane;
 
+use crate::plane::Plane;
 use crate::shared::Shared;
 use crate::transform::Transform;
 
@@ -11,6 +11,7 @@ use crate::transform::Transform;
 // https://github.com/mozilla/cbindgen
 
 // Line pipeline interface
+#[allow(dead_code)]
 #[repr(u8)]
 pub enum Style {
     None,

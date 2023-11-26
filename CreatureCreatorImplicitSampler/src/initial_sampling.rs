@@ -1,10 +1,9 @@
 use std::f64::consts::PI;
 
-use nalgebra::{point, Point3, vector, Vector3};
-use crate::spatial_index::kd_indexer::KdContainer;
-use crate::spatial_index::SpatialIndexer;
-use crate::surface::{gradient, on_surface, seed, Surface};
+use nalgebra::{Point3, vector, Vector3};
 
+use crate::spatial_index::kd_indexer::KdContainer;
+use crate::surface::{gradient, on_surface, seed, Surface};
 
 pub fn sample<S: Surface>(surface: &S, repulsion_radius: f32) -> Vec<Point3<f32>> {
     let seed = seed(surface);
@@ -31,7 +30,6 @@ pub fn sample<S: Surface>(surface: &S, repulsion_radius: f32) -> Vec<Point3<f32>
 }
 
 fn plane_basis_vectors(
-    origin: Point3<f32>,
     normal: Vector3<f32>
 ) -> (Vector3<f32>, Vector3<f32>) {
     let mut cardinal = vector![0.0, 0.0, 0.0];
@@ -50,10 +48,9 @@ fn sibling_points<S: Surface>(
 ) -> Vec<Point3<f32>> {
     let normal = gradient(surface, parent).normalize();
 
-    let (u, v) = plane_basis_vectors(parent, normal);
+    let (u, v) = plane_basis_vectors(normal);
 
-    let mut siblings = Vec::new();
-    siblings.reserve(6);
+    let mut siblings = Vec::with_capacity(6);
 
     for i in 0..6 {
         let ipi3 = (i as f64 * PI) / 3.0;

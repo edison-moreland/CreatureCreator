@@ -3,10 +3,11 @@ use std::mem;
 use std::ops::Neg;
 
 use nalgebra::{Point3, vector, Vector3};
+
 use crate::buffer_allocator::{BufferAllocator, StackBufferAllocator};
 use crate::initial_sampling::sample;
-use crate::spatial_index::kd_indexer::KdIndexer;
 use crate::spatial_index::{Positioned, SpatialIndexer};
+use crate::spatial_index::kd_indexer::KdIndexer;
 use crate::surface::{gradient, Surface};
 
 const REPULSION_AMPLITUDE: f32 = 6.0;

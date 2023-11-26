@@ -8,9 +8,12 @@
 
 use std::f32::consts::PI;
 use std::mem::size_of;
+
 use metal::{DeviceRef, MTLPixelFormat, MTLPrimitiveType, MTLVertexFormat, MTLVertexStepFunction, NSUInteger, RenderCommandEncoderRef, RenderPipelineDescriptor, RenderPipelineState, VertexAttributeDescriptor, VertexBufferLayoutDescriptor, VertexDescriptor};
 use nalgebra::{Matrix4, Point3, vector, Vector3};
+
 use creature_creator_implicit_sampler::{ImplicitSampler, Surface};
+
 use crate::shared::Shared;
 use crate::transform::Transform;
 
@@ -92,8 +95,10 @@ impl Surface for RenderSurface {
 pub mod ffi {
     use std::ffi::c_void;
     use std::mem::forget;
+
     use metal::{DeviceRef, MTLDevice, RenderCommandEncoderRef};
     use metal::foreign_types::ForeignTypeRef;
+
     use crate::surfaces::{Ellipsoid, SurfacePipeline};
     use crate::transform::Transform;
 
@@ -228,7 +233,7 @@ impl SurfacePipeline {
         let attributes = vertex_descriptor.attributes();
 
         // Vertex attributes
-        let mut vertex_offset: NSUInteger = 0;
+        let vertex_offset: NSUInteger = 0;
         let mut instance_offset: NSUInteger = 0;
         let mut attribute_i: NSUInteger = 0;
 
@@ -236,7 +241,7 @@ impl SurfacePipeline {
         attributes.set_object_at(attribute_i, Some(&SurfacePipeline::attribute(
             PIPELINE_VERTEX_BUFFER, vertex_offset, MTLVertexFormat::Float3,
         )));
-        vertex_offset += size_of::<[f32; 3]>() as NSUInteger;
+        // vertex_offset += size_of::<[f32; 3]>() as NSUInteger;
         attribute_i += 1;
 
         // center

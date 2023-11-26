@@ -4,6 +4,7 @@ use std::fmt::Debug;
 use std::ops::Index;
 
 use nalgebra::Point3;
+
 use crate::spatial_index::{Positioned, SpatialIndexer};
 
 // KD_LEAF_SIZE controls the max size of leaf nodes. 100 was chosen after some testing
