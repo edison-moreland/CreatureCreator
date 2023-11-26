@@ -84,12 +84,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "creature-creator-implicit-sampler"
+version = "0.1.0"
+dependencies = [
+ "nalgebra",
+ "rand",
+]
+
+[[package]]
 name = "creature-creator-pipelines"
 version = "0.1.0"
 dependencies = [
+ "creature-creator-implicit-sampler",
  "metal",
  "nalgebra",
- "rand",
 ]
 
 [[package]]

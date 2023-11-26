@@ -4,4 +4,5 @@
 
 #include "transform.h"
 #include "lines.h"
+#include "surfaces.h"
 #include "uniforms.h"

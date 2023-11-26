@@ -88,8 +88,6 @@ pub mod ffi {
 
 // \/ Implementation below \/
 
-// LineInstance is what is given to the shader
-// A single line may be split into multiple instances
 
 const INSTANCE_VERTEX_COUNT: usize = 4;
 const INSTANCE_SHAPE_COUNT: usize = 2;
@@ -103,6 +101,8 @@ const PIPELINE_PIXEL_FORMAT: MTLPixelFormat = MTLPixelFormat::RGBA8Unorm;
 const PIPELINE_VERTEX_BUFFER: NSUInteger = 1;
 const PIPELINE_INSTANCE_BUFFER: NSUInteger = 2;
 
+// LineInstance is what is given to the shader
+// A single line may be split into multiple instances
 #[repr(C)]
 struct LineInstance {
     a: [f32; 3],
@@ -260,10 +260,10 @@ impl LinePipeline {
     }
 
     pub fn new(device: &DeviceRef) -> Self {
-        LinePipeline {
-            pipeline: LinePipeline::new_pipeline(device),
-            vertices: LinePipeline::new_vertex_buffer(device),
-            instances: LinePipeline::new_instance_buffer(device),
+        Self {
+            pipeline: Self::new_pipeline(device),
+            vertices: Self::new_vertex_buffer(device),
+            instances: Self::new_instance_buffer(device),
             instance_count: 0,
         }
     }
@@ -363,7 +363,7 @@ impl LinePipeline {
         }
     }
 
-    pub fn commit(&mut self, encoder: &RenderCommandEncoderRef) {
+    fn encode(&self, encoder: &RenderCommandEncoderRef) {
         encoder.set_render_pipeline_state(&self.pipeline);
         encoder.set_vertex_buffer(PIPELINE_VERTEX_BUFFER, Some(self.vertices.buffer()), 0);
         encoder.set_vertex_buffer(PIPELINE_INSTANCE_BUFFER, Some(self.instances.buffer()), 0);
@@ -374,6 +374,12 @@ impl LinePipeline {
             INSTANCE_VERTEX_COUNT as NSUInteger,
             self.instance_count as NSUInteger,
         );
-        self.instance_count = 0;
+    }
+
+    pub fn commit(&mut self, encoder: &RenderCommandEncoderRef) {
+        if self.instance_count != 0 {
+            self.encode(encoder);
+            self.instance_count = 0;
+        }
     }
 }

@@ -7,6 +7,7 @@ edition = "2021"
 crate-type = ["staticlib"]
 
 [dependencies]
-rand = "0.8"
+creature-creator-implicit-sampler = { path = "../CreatureCreatorImplicitSampler"}
+
 nalgebra = "0.32"
 metal = "0.27"

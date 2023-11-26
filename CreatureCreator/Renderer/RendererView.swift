@@ -24,11 +24,13 @@ struct RendererView: PlatformAgnosticViewRepresentable {
         private var camera: Camera
         
         private var linePipeline: LinePipeline
+        private var surfacePipeline: SurfacePipeline
         
         override init() {
             self.device = MTLCreateSystemDefaultDevice()!
             self.commandQueue = device.makeCommandQueue()!
             self.linePipeline = LinePipeline(device)
+            self.surfacePipeline = SurfacePipeline(device)
            
             let depthDescriptor = MTLDepthStencilDescriptor()
             depthDescriptor.isDepthWriteEnabled = true
@@ -57,6 +59,7 @@ struct RendererView: PlatformAgnosticViewRepresentable {
             var uniforms = self.camera.uniforms()
             encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
                 
+            self.surfacePipeline.commit(encoder)
             self.linePipeline.commit(encoder)
             
             encoder.endEncoding()
@@ -66,6 +69,11 @@ struct RendererView: PlatformAgnosticViewRepresentable {
         }
         
         func draw(in view: MTKView) {
+            self.surfacePipeline.draw(
+                transform(),
+                ellipsoid: (5.0, 5.0, 5.0)
+            )
+            
             self.linePipeline.draw(
                 transform(
                     rotation: (0, 0, -90)

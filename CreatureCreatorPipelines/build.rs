@@ -3,7 +3,9 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn main() {
+    // TODO: Can we get xcode to compile the shaders? Would there be any benefit?
     compile_shader(&PathBuf::from("src/lines.metal"));
+    compile_shader(&PathBuf::from("src/surfaces.metal"));
 }
 
 fn compile_shader(shader_source: &Path) {
