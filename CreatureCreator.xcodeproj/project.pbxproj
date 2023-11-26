@@ -11,6 +11,7 @@
 		B74F12042B11C6E50033C02A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74F12032B11C6E50033C02A /* ContentView.swift */; };
 		B74F12062B11C6E60033C02A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12052B11C6E60033C02A /* Assets.xcassets */; };
 		B74F120A2B11C6E60033C02A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12092B11C6E60033C02A /* Preview Assets.xcassets */; };
+		B76A6FE52B12E8BA00FCBFC0 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76A6FE42B12E8BA00FCBFC0 /* Transform.swift */; };
 		B7C6C9D82B129F0400D07A44 /* libcreature_creator_pipelines.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */; };
 		B7C6C9E32B12B3BB00D07A44 /* lines.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9DF2B12B3BB00D07A44 /* lines.rs */; };
 		B7C6C9E42B12B3BB00D07A44 /* transform.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9E12B12B3BB00D07A44 /* transform.rs */; };
@@ -33,6 +34,7 @@
 		B74F12142B11CA680033C02A /* lib.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lib.rs; sourceTree = "<group>"; };
 		B74F12242B11CBE50033C02A /* xcode-cargo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "xcode-cargo.sh"; sourceTree = "<group>"; };
 		B74F14AF2B11CBE50033C02A /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
+		B76A6FE42B12E8BA00FCBFC0 /* Transform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
 		B7C6C9D12B129D8500D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = target/debug/libcreature_creator_pipelines.a; sourceTree = "<group>"; };
 		B7C6C9D32B129E4200D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-darwin/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
 		B7C6C9D52B129E7700D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-ios/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				B7C6C9EE2B12D1F700D07A44 /* RendererView.swift */,
 				B7C6C9F02B12D23600D07A44 /* Camera.swift */,
 				B7C6C9F22B12D28D00D07A44 /* Uniforms.h */,
+				B76A6FE42B12E8BA00FCBFC0 /* Transform.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				B7C6C9EF2B12D1F700D07A44 /* RendererView.swift in Sources */,
 				B7C6C9F12B12D23600D07A44 /* Camera.swift in Sources */,
 				B74F12042B11C6E50033C02A /* ContentView.swift in Sources */,
+				B76A6FE52B12E8BA00FCBFC0 /* Transform.swift in Sources */,
 				B7C6C9E72B12B40200D07A44 /* Lines.swift in Sources */,
 				B7C6C9F42B12D39F00D07A44 /* PlatformViewRepresentable.swift in Sources */,
 				B74F12022B11C6E50033C02A /* CreatureCreatorApp.swift in Sources */,

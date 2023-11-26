@@ -9,5 +9,5 @@ case "$PLATFORM_NAME" in
 esac
 TARGET="${ARCH}-apple-${OS}"
 
-
+rm CreatureCreatorPipelines/src/lines.metallib
 cargo build --release --target="${TARGET}"

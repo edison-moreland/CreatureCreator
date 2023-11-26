@@ -28,7 +28,7 @@ struct RendererView: PlatformAgnosticViewRepresentable {
         override init() {
             self.device = MTLCreateSystemDefaultDevice()!
             self.commandQueue = device.makeCommandQueue()!
-            self.linePipeline = LinePipeline(device: device)
+            self.linePipeline = LinePipeline(device)
            
             let depthDescriptor = MTLDepthStencilDescriptor()
             depthDescriptor.isDepthWriteEnabled = true
@@ -57,7 +57,7 @@ struct RendererView: PlatformAgnosticViewRepresentable {
             var uniforms = self.camera.uniforms()
             encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
                 
-            self.linePipeline.commit(encoder: encoder)
+            self.linePipeline.commit(encoder)
             
             encoder.endEncoding()
             
@@ -67,17 +67,32 @@ struct RendererView: PlatformAgnosticViewRepresentable {
         
         func draw(in view: MTKView) {
             self.linePipeline.draw(
-                transform: Transform(
-                    position: (0, 0, 0),
-                    rotation: (0, 0, 0),
-                    scale: (1, 1, 1)
+                transform(
+                    rotation: (0, 0, -90)
                 ),
-                line: Line(
-                    style: 0,
-                    color: (0, 0, 0),
-                    size: 10,
-                    thickness: 0.5,
-                    dash_size: 0
+                arrow(
+                    length: 10,
+                    color: (1, 0, 0),
+                    thickness: 0.5
+                )
+            )
+            
+            self.linePipeline.draw(
+                transform(),
+                arrow(
+                    length: 10,
+                    color: (0, 1, 0),
+                    thickness: 0.5
+                )
+            )
+            self.linePipeline.draw(
+                transform(
+                    rotation: (90, 0, 0)
+                ),
+                arrow(
+                    length: 10,
+                    color: (0, 0, 1),
+                    thickness: 0.5
                 )
             )
             

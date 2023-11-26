@@ -24,6 +24,8 @@ fn compile_shader(shader_source: &Path) {
     let air_path = intermediate_dir.join(format!("{}.air", shader_name));
     let metallib_path = out_dir.join(format!("{}.metallib", shader_name));
 
+    println!("cargo:rerun-if-changed={}", metallib_path.to_str().unwrap());
+
     let platform = env::var("PLATFORM_NAME").unwrap_or(String::from("macosx"));
 
     panic_if_failed(Command::new("xcrun").args([
