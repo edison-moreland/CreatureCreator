@@ -8,6 +8,7 @@
 import Foundation
 import MetalKit
 
+// TODO(HUGE): How can we avoid doing work? The particle sim doesn't need to run every frame if equilibrium has been reached and surfaces haven't moved. Ditto of lines.
 
 struct RendererView: PlatformAgnosticViewRepresentable {
     static let pixelFormat: MTLPixelFormat = .rgba8Unorm
@@ -43,37 +44,28 @@ struct RendererView: PlatformAgnosticViewRepresentable {
                 fov: 60,
                 aspectRatio: 1
             )
-        }
-        
-        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-            self.camera.aspectRatioUpdated(aspectRatio: Float(size.width / size.height))
-        }
-        
-        func commit(view: MTKView) {
-            let buffer = self.commandQueue.makeCommandBuffer()!
-            let descriptor = view.currentRenderPassDescriptor!
-            let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor)!
             
-            encoder.setDepthStencilState(self.depthStencil)
             
-            var uniforms = self.camera.uniforms()
-            encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
-                
-            self.surfacePipeline.commit(encoder)
-            self.linePipeline.commit(encoder)
-            
-            encoder.endEncoding()
-            
-            buffer.present(view.currentDrawable!)
-            buffer.commit()
-        }
-        
-        func draw(in view: MTKView) {
+            self.surfacePipeline.begin()
             self.surfacePipeline.draw(
                 transform(),
                 ellipsoid: (5.0, 5.0, 5.0)
             )
+            self.surfacePipeline.draw(
+                transform(
+                    position: (0.0, 0.0, 5.0)
+                ),
+                ellipsoid: (2.5, 2.5, 5.0)
+            )
+            self.surfacePipeline.draw(
+                transform(
+                    position: (5.0, 0.0, 0.0)
+                ),
+                ellipsoid: (5.0, 2.5, 2.5)
+            )
+            self.surfacePipeline.end()
             
+            self.linePipeline.begin()
             self.linePipeline.draw(
                 transform(
                     rotation: (0, 0, -90)
@@ -103,8 +95,30 @@ struct RendererView: PlatformAgnosticViewRepresentable {
                     thickness: 0.5
                 )
             )
+            self.linePipeline.end()
+        }
+        
+        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            self.camera.aspectRatioUpdated(aspectRatio: Float(size.width / size.height))
+        }
+        
+        func draw(in view: MTKView) {
+            let buffer = self.commandQueue.makeCommandBuffer()!
+            let descriptor = view.currentRenderPassDescriptor!
+            let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor)!
             
-            self.commit(view: view)
+            encoder.setDepthStencilState(self.depthStencil)
+            
+            var uniforms = self.camera.uniforms()
+            encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
+                
+            self.surfacePipeline.encode(encoder)
+            self.linePipeline.encode(encoder)
+            
+            encoder.endEncoding()
+            
+            buffer.present(view.currentDrawable!)
+            buffer.commit()
         }
     }
     

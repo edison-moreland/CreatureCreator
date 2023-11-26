@@ -13,7 +13,7 @@ use crate::surface::{gradient, Surface};
 const REPULSION_AMPLITUDE: f32 = 6.0;
 const FEEDBACK: f32 = 15.0;
 const NEIGHBOUR_RADIUS: f32 = 3.0;
-const UPDATE_ITERATIONS: usize = 8;
+const UPDATE_ITERATIONS: usize = 10;
 const ITERATION_T_STEP: f32 = 0.03;
 const EQUILIBRIUM_SPEED: f32 = 100.0;
 const FISSION_COEFFICIENT: f32 = 0.2;
@@ -116,7 +116,7 @@ impl<const MAX_SAMPLE_COUNT: usize> ImplicitSampler<MAX_SAMPLE_COUNT> {
         // The initial sampling isn't taken until the particle system is stepped for the first time
         // This way we don't need to know what surface we're sampling when the particle system is allocated
         println!("Initial sampling...");
-        let positions = sample(surface, desired_radius * 2.0);
+        let positions = sample(surface, desired_radius);
         if positions.len() > MAX_SAMPLE_COUNT {
             panic!("TOO DANG BIG!!")
         }

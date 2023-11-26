@@ -95,13 +95,13 @@ impl Surface for RenderSurface {
 
 pub mod ffi {
     use std::ffi::c_void;
-    use std::mem::forget;
 
     use metal::{DeviceRef, MTLDevice, RenderCommandEncoderRef};
     use metal::foreign_types::ForeignTypeRef;
 
     use crate::surfaces::{Ellipsoid, SurfacePipeline};
     use crate::transform::Transform;
+    use crate::utils::{with_boxed, with_boxed_mut};
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_make(device_ptr: *mut c_void) -> *mut c_void {
@@ -124,29 +124,35 @@ pub mod ffi {
     }
 
     #[no_mangle]
-    pub extern "C" fn surface_pipeline_draw_ellipsoid(pipeline_ptr: *mut c_void, transform: Transform, ellipsoid: Ellipsoid) {
-        let mut pipeline = unsafe {
-            Box::from_raw(pipeline_ptr.cast::<SurfacePipeline>())
-        };
-
-        pipeline.draw_ellipsoid(transform, ellipsoid);
-
-        forget(pipeline)
+    pub extern "C" fn surface_pipeline_begin(pipeline_ptr: *mut c_void) {
+        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.begin()
+        })
     }
 
     #[no_mangle]
-    pub extern "C" fn surface_pipeline_commit(pipeline_ptr: *mut c_void, encoder_ptr: *mut c_void) {
-        let mut pipeline = unsafe {
-            Box::from_raw(pipeline_ptr.cast::<SurfacePipeline>())
-        };
+    pub extern "C" fn surface_pipeline_end(pipeline_ptr: *mut c_void) {
+        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.end()
+        })
+    }
 
+    #[no_mangle]
+    pub extern "C" fn surface_pipeline_draw_ellipsoid(pipeline_ptr: *mut c_void, transform: Transform, ellipsoid: Ellipsoid) {
+        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.draw_ellipsoid(transform, ellipsoid)
+        })
+    }
+
+    #[no_mangle]
+    pub extern "C" fn surface_pipeline_encode(pipeline_ptr: *mut c_void, encoder_ptr: *mut c_void) {
         let encoder = unsafe {
             RenderCommandEncoderRef::from_ptr(encoder_ptr.cast())
         };
 
-        pipeline.commit(encoder);
-
-        forget(pipeline)
+        with_boxed::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.encode(encoder)
+        })
     }
 }
 
@@ -332,12 +338,14 @@ impl SurfacePipeline {
 
             surface: RenderSurface::new(),
             sampler: ImplicitSampler::new(),
-            sample_resolution: 0.5,
+            sample_resolution: 0.3,
         }
     }
 
-    pub fn draw_ellipsoid(&mut self, transform: Transform, ellipsoid: Ellipsoid) {
-        self.surface.push(transform.matrix(), ellipsoid)
+    pub fn begin(&mut self) {
+    //     Prepare for surface to be refreshed
+        self.surface.clear();
+        self.instance_count = 0
     }
 
     fn update_surface_samples(&mut self) {
@@ -358,27 +366,31 @@ impl SurfacePipeline {
         self.surface.clear();
     }
 
-    fn encode(&self, encoder: &RenderCommandEncoderRef) {
-        encoder.set_render_pipeline_state(&self.pipeline);
-        encoder.set_vertex_buffer(PIPELINE_VERTEX_BUFFER, Some(self.vertices.buffer()), 0);
-        encoder.set_vertex_buffer(PIPELINE_INSTANCE_BUFFER, Some(self.instances.buffer()), 0);
+    pub fn end(&mut self) {
+        assert!(!self.surface.is_empty(), "Nothing was drawn!");
 
-        encoder.draw_primitives_instanced(
-            MTLPrimitiveType::Triangle,
-            0,
-            INSTANCE_VERTEX_COUNT as NSUInteger,
-            self.instance_count as NSUInteger,
-        )
+        let start = Instant::now();
+        self.update_surface_samples();
+        let sampling_elapsed= start.elapsed();
+        dbg!(sampling_elapsed);
     }
 
-    pub fn commit(&mut self, encoder: &RenderCommandEncoderRef) {
-        if !self.surface.is_empty() {
-            let start = Instant::now();
-            self.update_surface_samples();
-            let sampling_elapsed= start.elapsed();
-            dbg!(sampling_elapsed);
+    pub fn draw_ellipsoid(&mut self, transform: Transform, ellipsoid: Ellipsoid) {
+        self.surface.push(transform.matrix(), ellipsoid)
+    }
 
-            self.encode(encoder);
+    pub fn encode(&self, encoder: &RenderCommandEncoderRef) {
+        if self.instance_count != 0 {
+            encoder.set_render_pipeline_state(&self.pipeline);
+            encoder.set_vertex_buffer(PIPELINE_VERTEX_BUFFER, Some(self.vertices.buffer()), 0);
+            encoder.set_vertex_buffer(PIPELINE_INSTANCE_BUFFER, Some(self.instances.buffer()), 0);
+
+            encoder.draw_primitives_instanced(
+                MTLPrimitiveType::Triangle,
+                0,
+                INSTANCE_VERTEX_COUNT as NSUInteger,
+                self.instance_count as NSUInteger,
+            )
         }
     }
 }

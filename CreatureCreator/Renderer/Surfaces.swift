@@ -21,13 +21,21 @@ class SurfacePipeline {
         surface_pipeline_free(self.ptr)
     }
     
+    func begin() {
+        surface_pipeline_begin(self.ptr)
+    }
+    
+    func end() {
+        surface_pipeline_end(self.ptr)
+    }
+    
     func draw(_ transform: Transform, ellipsoid: (Float, Float, Float)) {
         surface_pipeline_draw_ellipsoid(self.ptr, transform, Ellipsoid(size: ellipsoid))
     }
     
-    func commit(_ encoder: MTLRenderCommandEncoder) {
+    func encode(_ encoder: MTLRenderCommandEncoder) {
         let encoder_ptr = Unmanaged.passUnretained(encoder).toOpaque()
         
-        surface_pipeline_commit(self.ptr, encoder_ptr)
+        surface_pipeline_encode(self.ptr, encoder_ptr)
     }
 }

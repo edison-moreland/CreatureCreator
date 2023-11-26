@@ -21,14 +21,22 @@ class LinePipeline {
         line_pipeline_free(self.ptr)
     }
     
+    func begin() {
+        line_pipeline_begin(self.ptr)
+    }
+    
+    func end() {
+        line_pipeline_end(self.ptr)
+    }
+    
     func draw(_ transform: Transform, _ line: Line) {
         line_pipeline_draw(self.ptr, transform, line)
     }
     
-    func commit(_ encoder: MTLRenderCommandEncoder) {
+    func encode(_ encoder: MTLRenderCommandEncoder) {
         let encoder_ptr = Unmanaged.passUnretained(encoder).toOpaque()
         
-        line_pipeline_commit(self.ptr, encoder_ptr)
+        line_pipeline_encode(self.ptr, encoder_ptr)
     }
 }
 

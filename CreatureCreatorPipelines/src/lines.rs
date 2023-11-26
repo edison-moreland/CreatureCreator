@@ -31,12 +31,12 @@ pub struct Line {
 
 pub mod ffi {
     use std::ffi::c_void;
-    use std::mem::forget;
 
     use metal::{DeviceRef, MTLDevice, RenderCommandEncoderRef};
     use metal::foreign_types::ForeignTypeRef;
 
     use crate::transform::Transform;
+    use crate::utils::{with_boxed, with_boxed_mut};
 
     use super::{Line, LinePipeline};
 
@@ -61,29 +61,35 @@ pub mod ffi {
     }
 
     #[no_mangle]
-    pub extern "C" fn line_pipeline_draw(pipeline_ptr: *mut c_void, transform: Transform, line: Line) {
-        let mut pipeline = unsafe {
-            Box::from_raw(pipeline_ptr.cast::<LinePipeline>())
-        };
-
-        pipeline.draw(transform, line);
-
-        forget(pipeline)
+    pub extern "C" fn line_pipeline_begin(pipeline_ptr: *mut c_void) {
+        with_boxed_mut::<LinePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.begin()
+        })
     }
 
     #[no_mangle]
-    pub extern "C" fn line_pipeline_commit(pipeline_ptr: *mut c_void, encoder_ptr: *mut c_void) {
-        let mut pipeline = unsafe {
-            Box::from_raw(pipeline_ptr.cast::<LinePipeline>())
-        };
+    pub extern "C" fn line_pipeline_end(pipeline_ptr: *mut c_void) {
+        with_boxed_mut::<LinePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.end()
+        })
+    }
 
+    #[no_mangle]
+    pub extern "C" fn line_pipeline_draw(pipeline_ptr: *mut c_void, transform: Transform, line: Line) {
+        with_boxed_mut::<LinePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.draw(transform, line)
+        });
+    }
+
+    #[no_mangle]
+    pub extern "C" fn line_pipeline_encode(pipeline_ptr: *mut c_void, encoder_ptr: *mut c_void) {
         let encoder = unsafe {
             RenderCommandEncoderRef::from_ptr(encoder_ptr.cast())
         };
 
-        pipeline.commit(encoder);
-
-        forget(pipeline)
+        with_boxed::<LinePipeline, _, _>(pipeline_ptr, |pipeline| {
+            pipeline.encode(encoder);
+        });
     }
 }
 
@@ -270,6 +276,15 @@ impl LinePipeline {
         self.instance_count += 1
     }
 
+    pub fn begin(&mut self) {
+        // Start drawing
+        self.instance_count = 0
+    }
+
+    pub fn end(&mut self) {
+        // This is only here for symmetry with other pipelines
+    }
+
     pub fn draw(&mut self, transform: Transform, line: Line) {
         let matrix = transform.matrix();
 
@@ -358,23 +373,18 @@ impl LinePipeline {
         }
     }
 
-    fn encode(&self, encoder: &RenderCommandEncoderRef) {
-        encoder.set_render_pipeline_state(&self.pipeline);
-        encoder.set_vertex_buffer(PIPELINE_VERTEX_BUFFER, Some(self.vertices.buffer()), 0);
-        encoder.set_vertex_buffer(PIPELINE_INSTANCE_BUFFER, Some(self.instances.buffer()), 0);
-
-        encoder.draw_primitives_instanced(
-            MTLPrimitiveType::TriangleStrip,
-            0,
-            INSTANCE_VERTEX_COUNT as NSUInteger,
-            self.instance_count as NSUInteger,
-        );
-    }
-
-    pub fn commit(&mut self, encoder: &RenderCommandEncoderRef) {
+    pub fn encode(&self, encoder: &RenderCommandEncoderRef) {
         if self.instance_count != 0 {
-            self.encode(encoder);
-            self.instance_count = 0;
+            encoder.set_render_pipeline_state(&self.pipeline);
+            encoder.set_vertex_buffer(PIPELINE_VERTEX_BUFFER, Some(self.vertices.buffer()), 0);
+            encoder.set_vertex_buffer(PIPELINE_INSTANCE_BUFFER, Some(self.instances.buffer()), 0);
+
+            encoder.draw_primitives_instanced(
+                MTLPrimitiveType::TriangleStrip,
+                0,
+                INSTANCE_VERTEX_COUNT as NSUInteger,
+                self.instance_count as NSUInteger,
+            );
         }
     }
 }
