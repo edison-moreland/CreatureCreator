@@ -161,17 +161,11 @@ impl LinePipeline {
         pipeline_descriptor.set_vertex_function(Some(&vertex_function));
         pipeline_descriptor.set_fragment_function(Some(&frag_function));
         pipeline_descriptor.set_depth_attachment_pixel_format(PIPELINE_DEPTH_FORMAT);
-
-        let attachment = pipeline_descriptor.color_attachments().object_at(0).unwrap();
-
-        attachment.set_pixel_format(PIPELINE_PIXEL_FORMAT);
-        attachment.set_blending_enabled(true);
-        attachment.set_rgb_blend_operation(metal::MTLBlendOperation::Add);
-        attachment.set_alpha_blend_operation(metal::MTLBlendOperation::Add);
-        attachment.set_source_rgb_blend_factor(metal::MTLBlendFactor::SourceAlpha);
-        attachment.set_source_alpha_blend_factor(metal::MTLBlendFactor::SourceAlpha);
-        attachment.set_destination_rgb_blend_factor(metal::MTLBlendFactor::OneMinusSourceAlpha);
-        attachment.set_destination_alpha_blend_factor(metal::MTLBlendFactor::OneMinusSourceAlpha);
+        pipeline_descriptor
+            .color_attachments()
+            .object_at(0)
+            .unwrap()
+            .set_pixel_format(PIPELINE_PIXEL_FORMAT);
 
         let vertex_descriptor = VertexDescriptor::new();
         let attributes = vertex_descriptor.attributes();
