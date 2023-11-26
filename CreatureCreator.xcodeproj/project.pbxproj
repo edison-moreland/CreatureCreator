@@ -12,7 +12,14 @@
 		B74F12062B11C6E60033C02A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12052B11C6E60033C02A /* Assets.xcassets */; };
 		B74F120A2B11C6E60033C02A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B74F12092B11C6E60033C02A /* Preview Assets.xcassets */; };
 		B7C6C9D82B129F0400D07A44 /* libcreature_creator_pipelines.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */; };
-		B7C6C9DE2B12A10D00D07A44 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9DD2B12A10D00D07A44 /* Counter.swift */; };
+		B7C6C9E32B12B3BB00D07A44 /* lines.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9DF2B12B3BB00D07A44 /* lines.rs */; };
+		B7C6C9E42B12B3BB00D07A44 /* transform.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9E12B12B3BB00D07A44 /* transform.rs */; };
+		B7C6C9E72B12B40200D07A44 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9E62B12B40200D07A44 /* Lines.swift */; };
+		B7C6C9EA2B12CFB800D07A44 /* plane.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9E82B12CFB700D07A44 /* plane.rs */; };
+		B7C6C9EB2B12CFB800D07A44 /* shared.rs in Resources */ = {isa = PBXBuildFile; fileRef = B7C6C9E92B12CFB800D07A44 /* shared.rs */; };
+		B7C6C9EF2B12D1F700D07A44 /* RendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9EE2B12D1F700D07A44 /* RendererView.swift */; };
+		B7C6C9F12B12D23600D07A44 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9F02B12D23600D07A44 /* Camera.swift */; };
+		B7C6C9F42B12D39F00D07A44 /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C9F32B12D39F00D07A44 /* PlatformViewRepresentable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,14 +33,23 @@
 		B74F12142B11CA680033C02A /* lib.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lib.rs; sourceTree = "<group>"; };
 		B74F12242B11CBE50033C02A /* xcode-cargo.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "xcode-cargo.sh"; sourceTree = "<group>"; };
 		B74F14AF2B11CBE50033C02A /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
-		B7C6C9CE2B129D4900D07A44 /* counter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = counter.h; sourceTree = "<group>"; };
-		B7C6C9CF2B129D6300D07A44 /* counter.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = counter.rs; sourceTree = "<group>"; };
 		B7C6C9D12B129D8500D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = target/debug/libcreature_creator_pipelines.a; sourceTree = "<group>"; };
 		B7C6C9D32B129E4200D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-darwin/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
 		B7C6C9D52B129E7700D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-ios/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
 		B7C6C9D72B129F0400D07A44 /* libcreature_creator_pipelines.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcreature_creator_pipelines.a; path = "target/aarch64-apple-ios-sim/release/libcreature_creator_pipelines.a"; sourceTree = "<group>"; };
 		B7C6C9D92B12A0D100D07A44 /* CreatureCreator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CreatureCreator-Bridging-Header.h"; sourceTree = "<group>"; };
-		B7C6C9DD2B12A10D00D07A44 /* Counter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
+		B7C6C9DF2B12B3BB00D07A44 /* lines.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lines.rs; sourceTree = "<group>"; };
+		B7C6C9E02B12B3BB00D07A44 /* transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform.h; sourceTree = "<group>"; };
+		B7C6C9E12B12B3BB00D07A44 /* transform.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.rs; sourceTree = "<group>"; };
+		B7C6C9E22B12B3BB00D07A44 /* lines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lines.h; sourceTree = "<group>"; };
+		B7C6C9E62B12B40200D07A44 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
+		B7C6C9E82B12CFB700D07A44 /* plane.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plane.rs; sourceTree = "<group>"; };
+		B7C6C9E92B12CFB800D07A44 /* shared.rs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shared.rs; sourceTree = "<group>"; };
+		B7C6C9EC2B12CFC000D07A44 /* lines.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = lines.metal; sourceTree = "<group>"; };
+		B7C6C9EE2B12D1F700D07A44 /* RendererView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererView.swift; sourceTree = "<group>"; };
+		B7C6C9F02B12D23600D07A44 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		B7C6C9F22B12D28D00D07A44 /* Uniforms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Uniforms.h; sourceTree = "<group>"; };
+		B7C6C9F32B12D39F00D07A44 /* PlatformViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewRepresentable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,13 +87,14 @@
 		B74F12002B11C6E50033C02A /* CreatureCreator */ = {
 			isa = PBXGroup;
 			children = (
+				B7C6C9E52B12B3CD00D07A44 /* Renderer */,
 				B74F12012B11C6E50033C02A /* CreatureCreatorApp.swift */,
 				B74F12032B11C6E50033C02A /* ContentView.swift */,
 				B74F12052B11C6E60033C02A /* Assets.xcassets */,
 				B74F12072B11C6E60033C02A /* CreatureCreator.entitlements */,
 				B74F12082B11C6E60033C02A /* Preview Content */,
 				B7C6C9D92B12A0D100D07A44 /* CreatureCreator-Bridging-Header.h */,
-				B7C6C9DD2B12A10D00D07A44 /* Counter.swift */,
+				B7C6C9F32B12D39F00D07A44 /* PlatformViewRepresentable.swift */,
 			);
 			path = CreatureCreator;
 			sourceTree = "<group>";
@@ -102,8 +119,13 @@
 		B74F12132B11CA680033C02A /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B7C6C9CF2B129D6300D07A44 /* counter.rs */,
-				B7C6C9CE2B129D4900D07A44 /* counter.h */,
+				B7C6C9EC2B12CFC000D07A44 /* lines.metal */,
+				B7C6C9E82B12CFB700D07A44 /* plane.rs */,
+				B7C6C9E92B12CFB800D07A44 /* shared.rs */,
+				B7C6C9E22B12B3BB00D07A44 /* lines.h */,
+				B7C6C9DF2B12B3BB00D07A44 /* lines.rs */,
+				B7C6C9E02B12B3BB00D07A44 /* transform.h */,
+				B7C6C9E12B12B3BB00D07A44 /* transform.rs */,
 				B74F12142B11CA680033C02A /* lib.rs */,
 			);
 			path = src;
@@ -118,6 +140,17 @@
 				B7C6C9D12B129D8500D07A44 /* libcreature_creator_pipelines.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B7C6C9E52B12B3CD00D07A44 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				B7C6C9E62B12B40200D07A44 /* Lines.swift */,
+				B7C6C9EE2B12D1F700D07A44 /* RendererView.swift */,
+				B7C6C9F02B12D23600D07A44 /* Camera.swift */,
+				B7C6C9F22B12D28D00D07A44 /* Uniforms.h */,
+			);
+			path = Renderer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,8 +213,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7C6C9E32B12B3BB00D07A44 /* lines.rs in Resources */,
+				B7C6C9EB2B12CFB800D07A44 /* shared.rs in Resources */,
 				B74F120A2B11C6E60033C02A /* Preview Assets.xcassets in Resources */,
 				B74F12062B11C6E60033C02A /* Assets.xcassets in Resources */,
+				B7C6C9EA2B12CFB800D07A44 /* plane.rs in Resources */,
+				B7C6C9E42B12B3BB00D07A44 /* transform.rs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,9 +250,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7C6C9EF2B12D1F700D07A44 /* RendererView.swift in Sources */,
+				B7C6C9F12B12D23600D07A44 /* Camera.swift in Sources */,
 				B74F12042B11C6E50033C02A /* ContentView.swift in Sources */,
+				B7C6C9E72B12B40200D07A44 /* Lines.swift in Sources */,
+				B7C6C9F42B12D39F00D07A44 /* PlatformViewRepresentable.swift in Sources */,
 				B74F12022B11C6E50033C02A /* CreatureCreatorApp.swift in Sources */,
-				B7C6C9DE2B12A10D00D07A44 /* Counter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
