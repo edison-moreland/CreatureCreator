@@ -77,6 +77,7 @@ pub mod ffi {
     #[no_mangle]
     pub extern "C" fn line_pipeline_draw(pipeline_ptr: *mut c_void, transform: Transform, line: Line) {
         with_boxed_mut::<LinePipeline, _, _>(pipeline_ptr, |pipeline| {
+
             pipeline.draw(transform, line)
         });
     }

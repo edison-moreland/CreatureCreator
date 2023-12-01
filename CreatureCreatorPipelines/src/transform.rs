@@ -1,28 +1,17 @@
-use std::f32::consts::PI;
-
-use nalgebra::{Matrix4, Rotation3, Scale3, Translation3, vector};
+use nalgebra::{ArrayStorage, Matrix4};
 
 #[repr(C)]
 pub struct Transform {
-    pub position: [f32; 3],
-    pub rotation: [f32; 3],
-    pub scale: [f32; 3],
+    matrix: [[f32; 4]; 4],
+    matrix_inverse: [[f32; 4]; 4],
 }
 
 impl Transform {
     pub fn matrix(&self) -> Matrix4<f32> {
-        let translation = Translation3::new(
-            self.position[0], self.position[1], self.position[2]
-        ).to_homogeneous();
+        Matrix4::from_data(ArrayStorage(self.matrix))
+    }
 
-        let rotation = Rotation3::new(
-            vector![self.rotation[0], self.rotation[1], self.rotation[2]] * (PI / 180.0)
-        ).to_homogeneous();
-
-        let scale = Scale3::new(
-            self.scale[0], self.scale[1], self.scale[2]
-        ).to_homogeneous();
-
-        translation * rotation * scale
+    pub fn matrix_inverse(&self) -> Matrix4<f32> {
+        Matrix4::from_data(ArrayStorage(self.matrix_inverse))
     }
 }

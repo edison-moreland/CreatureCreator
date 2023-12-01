@@ -31,8 +31,8 @@ impl RenderSurface {
     fn new() -> Self {
         Self { shapes: vec![] }
     }
-    fn push(&mut self, transform: Matrix4<f32>, shape: Ellipsoid) {
-        self.shapes.push((transform, shape))
+    fn push(&mut self, transform: Transform, shape: Ellipsoid) {
+        self.shapes.push((transform.matrix_inverse(), shape))
     }
 
     fn clear(&mut self) {
@@ -376,7 +376,7 @@ impl SurfacePipeline {
     }
 
     pub fn draw_ellipsoid(&mut self, transform: Transform, ellipsoid: Ellipsoid) {
-        self.surface.push(transform.matrix(), ellipsoid)
+        self.surface.push(transform, ellipsoid)
     }
 
     pub fn encode(&self, encoder: &RenderCommandEncoderRef) {

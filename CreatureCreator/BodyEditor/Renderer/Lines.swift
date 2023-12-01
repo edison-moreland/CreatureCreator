@@ -29,8 +29,8 @@ class LinePipeline {
         line_pipeline_end(self.ptr)
     }
     
-    func draw(_ transform: Transform, _ line: Line) {
-        line_pipeline_draw(self.ptr, transform, line)
+    func draw(_ transform: MatrixTransform, _ line: Line) {
+        line_pipeline_draw(self.ptr, transform.ffi(), line)
     }
     
     func encode(_ encoder: MTLRenderCommandEncoder) {

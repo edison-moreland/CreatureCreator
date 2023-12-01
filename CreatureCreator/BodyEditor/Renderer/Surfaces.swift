@@ -8,6 +8,14 @@
 import Foundation
 import MetalKit
 
+enum Surface {
+    case Ellipsoid(Float, Float, Float)
+}
+
+func ellipsoid(_ x: Float, _ y: Float, _ z: Float) -> Surface {
+    .Ellipsoid(x, y, z)
+}
+
 class SurfacePipeline {
     private let ptr: UnsafeMutableRawPointer
     
@@ -29,8 +37,12 @@ class SurfacePipeline {
         surface_pipeline_end(self.ptr)
     }
     
-    func draw(_ transform: Transform, ellipsoid: (Float, Float, Float)) {
-        surface_pipeline_draw_ellipsoid(self.ptr, transform, Ellipsoid(size: ellipsoid))
+    func draw(_ transform: MatrixTransform, _ surface: Surface) {
+        switch surface {
+        case .Ellipsoid(let x, let y, let z):
+            surface_pipeline_draw_ellipsoid(self.ptr, transform.ffi(), Ellipsoid(size: (x, y, z)))
+        }
+        
     }
     
     func encode(_ encoder: MTLRenderCommandEncoder) {
