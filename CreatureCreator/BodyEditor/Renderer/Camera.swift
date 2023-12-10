@@ -8,11 +8,26 @@
 import Foundation
 import simd
 
+// Camera controller keeps the camera pointing at the target
+class CameraController {
+    var cameraNode: Node
+    var targetNode: Node
+    
+    init(cameraNode: Node, targetNode: Node) {
+        self.cameraNode = cameraNode
+        self.targetNode = targetNode
+    }
+    
+    func updateCamera() {
+        
+    }
+}
+
+
 struct Camera {
     var fov: Float
     var nearPlane: Float
     var farPlane: Float
-    
     
     init(
         fov: Float,
@@ -23,9 +38,7 @@ struct Camera {
         self.nearPlane = nearPlane
         self.farPlane = farPlane
     }
-}
-
-extension Camera {
+    
     func projectionMatrix(aspectRatio: Float) -> matrix_float4x4 {
         let va_tan = 1.0 / tanf((self.fov * (Float.pi / 180)) * 0.5)
         let ys = va_tan

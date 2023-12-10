@@ -52,21 +52,9 @@ struct BodyEditorView: View {
         camera.transform.position.z += 10
     }
     
-    var magnification: some Gesture {
-        return MagnifyGesture()
-            .onChanged { (value) in
-                guard let camera = self.graph.activeCamera else {
-                    preconditionFailure("No active camera set")
-                }
-                
-                camera.transform.position.z += value.velocity
-            }
-    }
-    
     var body: some View {
         NavigationStack {
             RendererView($graph)
-                .gesture(magnification)
                 .toolbar(id: "body_editor") {
                     ToolbarItem(id: "add_sphere", placement: .primaryAction) {
                         Button(action: addSphere) {

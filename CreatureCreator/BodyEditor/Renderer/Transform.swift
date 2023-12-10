@@ -8,6 +8,17 @@
 import Foundation
 import Spatial
 
+extension float4x4 {
+    func asTuple() -> ((Float, Float, Float, Float),(Float, Float, Float, Float),(Float, Float, Float, Float),(Float, Float, Float, Float)) {
+        return (
+            (self[0][0], self[0][1], self[0][2], self[0][3]),
+            (self[1][0], self[1][1], self[1][2], self[1][3]),
+            (self[2][0], self[2][1], self[2][2], self[2][3]),
+            (self[3][0], self[3][1], self[3][2], self[3][3])
+        )
+    }
+}
+
 struct MatrixTransform {
     let matrix: simd_float4x4
     let matrix_inverse: simd_float4x4
@@ -68,17 +79,20 @@ struct NodeTransform {
         self.scale = SIMD3(scale.0, scale.1, scale.2)
     }
     
-    func matrix() -> MatrixTransform {
-        let transform = AffineTransform3D(
+    func affine() -> AffineTransform3D {
+        return AffineTransform3D(
             scale: Size3D(vector: scale),
             rotation: Rotation3D(eulerAngles: EulerAngles(angles: rotation * (Double.pi / 180), order: .xyz)),
             translation: Vector3D(vector: position)
         )
-        
+    }
+    
+    func matrix() -> MatrixTransform {
+        let transform = self.affine()
         let matrix = transform.matrix4x4
         let matrix_inverse = transform.inverse!.matrix4x4
         
-        let ret = MatrixTransform(
+        return MatrixTransform(
             matrix: float4x4(
                 SIMD4<Float>(matrix[0]),
                 SIMD4<Float>(matrix[1]),
@@ -92,28 +106,7 @@ struct NodeTransform {
                 SIMD4<Float>(matrix_inverse[3])
             )
         )
-        
-        return ret
     }
     
-}
-
-extension float4x4 {
-    func asTuple() -> ((Float, Float, Float, Float),(Float, Float, Float, Float),(Float, Float, Float, Float),(Float, Float, Float, Float)) {
-
-//        TODO: Which is correct?
-        return (
-            (self[0][0], self[0][1], self[0][2], self[0][3]),
-            (self[1][0], self[1][1], self[1][2], self[1][3]),
-            (self[2][0], self[2][1], self[2][2], self[2][3]),
-            (self[3][0], self[3][1], self[3][2], self[3][3])
-        )
-//        return (
-//            (self[0][0], self[1][0], self[2][0], self[3][0]),
-//            (self[0][1], self[1][1], self[2][1], self[3][1]),
-//            (self[0][2], self[1][2], self[2][2], self[3][2]),
-//            (self[0][3], self[1][3], self[2][3], self[3][3])
-//        )
-    }
 }
 

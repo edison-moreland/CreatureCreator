@@ -22,7 +22,6 @@ class Renderer {
     private var commandQueue: MTLCommandQueue
     private var depthStencil: MTLDepthStencilState
     
-//    private var camera: Camera
     private var uniforms: Uniforms
     
     private var linePipeline: LinePipeline

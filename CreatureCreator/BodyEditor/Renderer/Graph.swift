@@ -65,7 +65,7 @@ class Node {
     func transformMatrix() -> MatrixTransform {
 //        Walk up the graph towards the root
         if let parent = self.parent {
-            return self.transform.matrix() * parent.transform.matrix()
+            return self.transform.matrix() * parent.transformMatrix()
         }
         
         return self.transform.matrix()
@@ -97,8 +97,6 @@ class RenderGraph {
         
         let projection = camera.projectionMatrix(aspectRatio: self.aspectRatio)
         let view = cameraNode.transformMatrix().matrix_inverse
-        
-//        let cameraOrigin = view * simd_float4(0, 0, 0, 1)
         
         let cameraOrigin = cameraNode.transform.position;
         
