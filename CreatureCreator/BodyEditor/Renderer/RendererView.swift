@@ -22,7 +22,8 @@ class Renderer {
     private var commandQueue: MTLCommandQueue
     private var depthStencil: MTLDepthStencilState
     
-    private var camera: Camera
+//    private var camera: Camera
+    private var uniforms: Uniforms
     
     private var linePipeline: LinePipeline
     private var surfacePipeline: SurfacePipeline
@@ -37,13 +38,8 @@ class Renderer {
         depthDescriptor.isDepthWriteEnabled = true
         depthDescriptor.depthCompareFunction = .lessEqual
         self.depthStencil = device.makeDepthStencilState(descriptor: depthDescriptor)!
-            
-        self.camera = Camera(
-            eye: simd_float3(40, 40, 40),
-            target: simd_float3(0, 0, 0),
-            fov: 60,
-            aspectRatio: 1
-        )
+        
+        self.uniforms = Uniforms()
     }
     
     func makeView() -> MTKView {
@@ -65,11 +61,9 @@ class Renderer {
         return view
     }
     
-    func viewResized(size: CGSize) {
-        self.camera.aspectRatioUpdated(aspectRatio: Float(size.width / size.height))
-    }
-    
     func drawGraph(graph: RenderGraph) {
+        (self.uniforms.camera, self.uniforms.cameraPosition) = graph.cameraParameters()
+        
         var drawingLines = false
         var drawingSurfaces = false
         
@@ -109,8 +103,7 @@ class Renderer {
         
         encoder.setDepthStencilState(self.depthStencil)
         
-        var uniforms = self.camera.uniforms()
-        encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
+        encoder.setVertexBytes(&self.uniforms, length: MemoryLayout<Uniforms>.size, index: 0)
             
         self.surfacePipeline.encode(encoder)
         self.linePipeline.encode(encoder)
@@ -144,7 +137,7 @@ struct RendererView: PlatformAgnosticViewRepresentable {
         }
         
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-            self.renderer.viewResized(size: size)
+            self.graph.aspectRatio = Float(size.width / size.height)
         }
         
         func draw(in view: MTKView) {

@@ -11,7 +11,7 @@ import SwiftUI
 struct CreatureCreatorApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            BodyEditorView()
         }
     }
 }
