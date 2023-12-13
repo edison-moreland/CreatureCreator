@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 func cardinalArrows(magnitude: Float) -> Node {
     return Node(transform()) {
         Node(transform(rotation: (0, 0, -90)),
@@ -30,13 +31,21 @@ struct BodyEditorView: View {
     
     init() {
         self.graph = RenderGraph()
-        self.graph.activeCamera = self.graph.root.push(Node(
+        
+        let camera = self.graph.root.push(Node(
             transform(
-                position: (0, 0, -40)
+                position: (-20, 20, -20)
             ),
             camera(fov: 90)
         ))
+        let cameraTarget = self.graph.root.push(Node(
+            transform(
+                position: (0, 0, 0)
+            )
+        ))
+        camera.lookAt(target: cameraTarget)
         
+        self.graph.activeCamera = camera
         self.graph.root.push(cardinalArrows(magnitude: 10))
     }
     

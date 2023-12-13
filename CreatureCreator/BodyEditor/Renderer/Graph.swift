@@ -63,12 +63,32 @@ class Node {
     }
     
     func transformMatrix() -> MatrixTransform {
-//        Walk up the graph towards the root
+        // Walk up the graph towards the root
         if let parent = self.parent {
             return self.transform.matrix() * parent.transformMatrix()
         }
         
         return self.transform.matrix()
+    }
+    
+    func lookAt(
+        target: Node
+    ) {
+        let eye = self.transformMatrix() * SIMD4(0, 0, 0, 1)
+        let target = target.transformMatrix() * SIMD4(0, 0, 0, 1)
+        
+        var lookAt = MatrixTransform(
+            eye: SIMD3(eye.x, eye.y, eye.z),
+            at: SIMD3(target.x, target.y, target.z),
+            up: SIMD3(0, 1, 0)
+        )
+        
+        // Remove any parent transform so we can apply the lookAt transform to the eye node
+        if let parent = self.parent {
+            lookAt = lookAt * parent.transformMatrix().inverse()
+        }
+        
+        self.transform = NodeTransform(matrix: lookAt)
     }
 }
 
@@ -96,7 +116,7 @@ class RenderGraph {
         }
         
         let projection = camera.projectionMatrix(aspectRatio: self.aspectRatio)
-        let view = cameraNode.transformMatrix().matrix_inverse
+        let view = cameraNode.transformMatrix().matrix
         
         let cameraOrigin = cameraNode.transform.position;
         

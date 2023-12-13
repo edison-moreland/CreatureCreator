@@ -37,10 +37,40 @@ struct MatrixTransform {
         self.matrix_inverse = simd_inverse(matrix)
     }
     
+    // Look at
+    init(
+        eye: simd_float3,
+        at: simd_float3,
+        up: simd_float3
+    ) {
+        let z = normalize(at - eye)
+        let x = normalize(cross(up, z))
+        let y = cross(z, x)
+        let t = simd_float3(
+            x: -dot(x, eye),
+            y: -dot(y, eye),
+            z: -dot(z, eye)
+        )
+    
+        self.init(matrix: simd_float4x4(
+            simd_float4(x.x, y.x, z.x, 0),
+            simd_float4(x.y, y.y, z.y, 0),
+            simd_float4(x.z, y.z, z.z, 0),
+            simd_float4(t.x, t.y, t.z, 1)
+        ))
+    }
+    
     func ffi() -> FFITransform {
         return FFITransform(
             matrix: self.matrix.asTuple(),
             matrix_inverse: self.matrix_inverse.asTuple()
+        )
+    }
+    
+    func inverse() -> MatrixTransform {
+        MatrixTransform(
+            matrix: self.matrix_inverse,
+            matrix_inverse: self.matrix
         )
     }
     
@@ -49,6 +79,10 @@ struct MatrixTransform {
             matrix: lhs.matrix * rhs.matrix,
             matrix_inverse: rhs.matrix_inverse * lhs.matrix_inverse
         )
+    }
+    
+    static func *(lhs: MatrixTransform, rhs: SIMD4<Float>) -> SIMD4<Float> {
+        return lhs.matrix * rhs
     }
 }
 
@@ -65,6 +99,8 @@ func transform(
 }
 
 struct NodeTransform {
+    private let rotationOrder = __SPEulerAngleOrder.xyz
+    
     var position: SIMD3<Double>
     var rotation: SIMD3<Double>
     var scale: SIMD3<Double>
@@ -77,6 +113,25 @@ struct NodeTransform {
         self.position = SIMD3(position.0, position.1, position.2)
         self.rotation = SIMD3(rotation.0, rotation.1, rotation.2)
         self.scale = SIMD3(scale.0, scale.1, scale.2)
+    }
+    
+    init(
+        affine: AffineTransform3D
+    ) {
+        self.position = affine.translation.vector
+        self.scale = affine.scale.vector
+        
+        if let rotation = affine.rotation {
+            self.rotation = rotation.eulerAngles(order: self.rotationOrder).angles * (180 / Double.pi)
+        } else {
+            self.rotation = SIMD3(0, 0, 0)
+        }
+    }
+    
+    init(
+        matrix: MatrixTransform
+    ) {
+        self.init(affine: AffineTransform3D(matrix.matrix)!)
     }
     
     func affine() -> AffineTransform3D {
