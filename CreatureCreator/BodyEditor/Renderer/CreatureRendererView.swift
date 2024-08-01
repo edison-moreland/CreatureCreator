@@ -41,7 +41,7 @@ class CreatureRendererDelegate : NSObject, SCNSceneRendererDelegate {
         uniforms.cameraPosition = pov.simdWorldPosition
         
         self.surfacePipeline.begin()
-        self.surfacePipeline.draw(NodeTransform().matrix(), .Ellipsoid(1, 1, 1))
+        self.surfacePipeline.draw(SCNMatrix4Identity, .Ellipsoid(1, 2, 1))
         self.surfacePipeline.end()
         
         let encoder = renderer.currentRenderCommandEncoder!
@@ -82,6 +82,7 @@ struct CreatureRendererView: PlatformAgnosticViewRepresentable {
         view.scene = scene
         view.rendersContinuously = true
         view.allowsCameraControl = true
+        view.usesReverseZ = false
 
         return view
     }

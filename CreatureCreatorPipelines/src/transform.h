@@ -1,9 +1,11 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include <simd/simd.h>
+
 struct FFITransform {
-    float matrix[4][4];
-    float matrix_inverse[4][4];
+    simd_float4x4 matrix;
+    simd_float4x4 matrix_inverse;
 };
 
 #endif

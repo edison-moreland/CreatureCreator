@@ -7,6 +7,7 @@
 
 import Foundation
 import MetalKit
+import SceneKit
 
 enum Surface {
     case Ellipsoid(Float, Float, Float)
@@ -37,10 +38,10 @@ class SurfacePipeline {
         surface_pipeline_end(self.ptr)
     }
     
-    func draw(_ transform: MatrixTransform, _ surface: Surface) {
+    func draw(_ transform: SCNMatrix4, _ surface: Surface) {
         switch surface {
         case .Ellipsoid(let x, let y, let z):
-            surface_pipeline_draw_ellipsoid(self.ptr, transform.ffi(), Ellipsoid(size: (x, y, z)))
+            surface_pipeline_draw_ellipsoid(self.ptr, transform.asFFITransform(), Ellipsoid(size: (x, y, z)))
         }
         
     }

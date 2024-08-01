@@ -10,23 +10,6 @@ import SwiftUI
 import SceneKit
 
 
-func cardinalArrows(magnitude: Float) -> Node {
-    return Node(transform()) {
-        Node(transform(rotation: (0, 0, -90)),
-             arrow(length: magnitude,
-                   color: (1, 0, 0),
-                   thickness: 0.2))
-        Node(transform(),
-             arrow(length: magnitude,
-                   color: (0, 1, 0),
-                   thickness: 0.2))
-        Node(transform(rotation: (90, 0, 0)),
-             arrow(length: magnitude,
-                   color: (0, 0, 1),
-                   thickness: 0.2))
-    }
-}
-
 func sceneKitArrows(magnitude: CGFloat) -> SCNNode {
     let root = SCNNode()
    
