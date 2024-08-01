@@ -69,17 +69,17 @@ float3 light_sample(float3 sample_point,
 
 vertex VertexOut
 vertex_main(VertexIn in [[stage_in]],
-            constant Uniform &uniform [[buffer(0)]])
+            constant Uniform &uniform [[buffer(10)]])
 {
-    float radius = in.radius * 2;
+    float radius = in.radius;
 
     float3 sphere_center = (in.center - (in.normal * radius));
 
     VertexOut out;
     out.position = uniform.camera * float4(sphere_center + radius * in.position, 1.0);
     out.color = float4(light_sample(sphere_center, in.normal), 1.0);
-    return
-    out;
+    
+    return out;
 }
 
 fragment float4

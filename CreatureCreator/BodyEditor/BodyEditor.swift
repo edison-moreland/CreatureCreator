@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SceneKit
 
 
 func cardinalArrows(magnitude: Float) -> Node {
@@ -26,44 +27,110 @@ func cardinalArrows(magnitude: Float) -> Node {
     }
 }
 
+func sceneKitArrows(magnitude: CGFloat) -> SCNNode {
+    let root = SCNNode()
+   
+    let coreMagnitude = magnitude/20;
+    
+    root.addChildNode({
+        let geometry = SCNBox(width: coreMagnitude,
+                              height: coreMagnitude,
+                              length: coreMagnitude,
+                              chamferRadius: 0.0)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = CGColor(red: 0.0,
+                                            green: 0.0,
+                                            blue: 0.0,
+                                            alpha: 1.0)
+        
+        geometry.firstMaterial = material
+        
+        let node = SCNNode(geometry: geometry)
+        
+        return node
+    }())
+   
+    root.addChildNode({
+        let geometry = SCNPyramid(width: coreMagnitude,
+                                  height: magnitude,
+                                  length: coreMagnitude)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = CGColor(red: 0.0,
+                                            green: 1.0,
+                                            blue: 0.0,
+                                            alpha: 1.0)
+        
+        geometry.firstMaterial = material
+        
+        let node = SCNNode(geometry: geometry)
+        node.position.y = coreMagnitude/2
+        
+        return node
+    }())
+    
+    root.addChildNode({
+        let geometry = SCNPyramid(width: coreMagnitude,
+                                  height: magnitude,
+                                  length: coreMagnitude)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = CGColor(red: 1.0,
+                                            green: 0.0,
+                                            blue: 0.0,
+                                            alpha: 1.0)
+        
+        geometry.firstMaterial = material
+        
+        let node = SCNNode(geometry: geometry)
+        node.position.x = coreMagnitude/2
+        node.rotation = SCNVector4(0, 0, 1, -CGFloat.pi/2)
+        
+        return node
+    }())
+    
+    root.addChildNode({
+        let geometry = SCNPyramid(width: coreMagnitude,
+                                  height: magnitude,
+                                  length: coreMagnitude)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = CGColor(red: 0.0,
+                                            green: 0.0,
+                                            blue: 1.0,
+                                            alpha: 1.0)
+        
+        geometry.firstMaterial = material
+        
+        let node = SCNNode(geometry: geometry)
+        node.position.z = coreMagnitude/2
+        node.rotation = SCNVector4(1, 0, 0, CGFloat.pi/2)
+        
+        return node
+    }())
+
+    return root
+}
+
 struct BodyEditorView: View {
-    @State var graph: RenderGraph
+    @State var scene: SCNScene
     
     init() {
-        self.graph = RenderGraph()
-        
-        let camera = self.graph.root.push(Node(
-            transform(
-                position: (-20, 20, -20)
-            ),
-            camera(fov: 90)
-        ))
-        let cameraTarget = self.graph.root.push(Node(
-            transform(
-                position: (0, 0, 0)
-            )
-        ))
-        camera.lookAt(target: cameraTarget)
-        
-        self.graph.activeCamera = camera
-        self.graph.root.push(cardinalArrows(magnitude: 10))
+        scene = SCNScene(named: "BodyEditor.scn")!
+       
+        scene.rootNode.addChildNode(sceneKitArrows(magnitude: 10.0))
     }
     
     func addSphere() {
-        self.graph.root.push(Node(transform(), ellipsoid(5, 5, 5)))
     }
     
     func moveCamera() {
-        guard let camera = self.graph.activeCamera else {
-            preconditionFailure("No active camera set")
-        }
-        
-        camera.transform.position.z += 10
     }
     
     var body: some View {
         NavigationStack {
-            RendererView($graph)
+            CreatureRendererView($scene)
                 .toolbar(id: "body_editor") {
                     ToolbarItem(id: "add_sphere", placement: .primaryAction) {
                         Button(action: addSphere) {

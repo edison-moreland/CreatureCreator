@@ -1,4 +1,3 @@
-
 // We're going to be exposed a pretty limited interface to the underlying sampler
 // Much more complex surfaces can be supported
 
@@ -10,8 +9,12 @@ use std::f32::consts::PI;
 use std::mem::size_of;
 use std::time::Instant;
 
-use metal::{DeviceRef, MTLPixelFormat, MTLPrimitiveType, MTLVertexFormat, MTLVertexStepFunction, NSUInteger, RenderCommandEncoderRef, RenderPipelineDescriptor, RenderPipelineState, VertexAttributeDescriptor, VertexBufferLayoutDescriptor, VertexDescriptor};
-use nalgebra::{Matrix4, Point3, vector, Vector3};
+use metal::{
+    DeviceRef, MTLPixelFormat, MTLPrimitiveType, MTLVertexFormat, MTLVertexStepFunction,
+    NSUInteger, RenderCommandEncoderRef, RenderPipelineDescriptor, RenderPipelineState,
+    VertexAttributeDescriptor, VertexBufferLayoutDescriptor, VertexDescriptor,
+};
+use nalgebra::{vector, Matrix4, Point3, Vector3};
 
 use creature_creator_implicit_sampler::{ImplicitSampler, Surface};
 
@@ -20,7 +23,7 @@ use crate::transform::Transform;
 
 #[repr(C)]
 pub struct Ellipsoid {
-    size: [f32; 3]
+    size: [f32; 3],
 }
 
 pub struct RenderSurface {
@@ -92,12 +95,11 @@ impl Surface for RenderSurface {
     }
 }
 
-
 pub mod ffi {
     use std::ffi::c_void;
 
-    use metal::{DeviceRef, MTLDevice, RenderCommandEncoderRef};
     use metal::foreign_types::ForeignTypeRef;
+    use metal::{DeviceRef, MTLDevice, RenderCommandEncoderRef};
 
     use crate::surfaces::{Ellipsoid, SurfacePipeline};
     use crate::transform::Transform;
@@ -105,9 +107,7 @@ pub mod ffi {
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_make(device_ptr: *mut c_void) -> *mut c_void {
-        let device = unsafe {
-            DeviceRef::from_ptr(device_ptr.cast::<MTLDevice>())
-        };
+        let device = unsafe { DeviceRef::from_ptr(device_ptr.cast::<MTLDevice>()) };
 
         let pipeline = Box::new(SurfacePipeline::new(device));
 
@@ -116,29 +116,27 @@ pub mod ffi {
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_free(pipeline_ptr: *mut c_void) {
-        let pipeline = unsafe {
-            Box::from_raw(pipeline_ptr.cast::<SurfacePipeline>())
-        };
+        let pipeline = unsafe { Box::from_raw(pipeline_ptr.cast::<SurfacePipeline>()) };
 
         drop(pipeline)
     }
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_begin(pipeline_ptr: *mut c_void) {
-        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
-            pipeline.begin()
-        })
+        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| pipeline.begin())
     }
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_end(pipeline_ptr: *mut c_void) {
-        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
-            pipeline.end()
-        })
+        with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| pipeline.end())
     }
 
     #[no_mangle]
-    pub extern "C" fn surface_pipeline_draw_ellipsoid(pipeline_ptr: *mut c_void, transform: Transform, ellipsoid: Ellipsoid) {
+    pub extern "C" fn surface_pipeline_draw_ellipsoid(
+        pipeline_ptr: *mut c_void,
+        transform: Transform,
+        ellipsoid: Ellipsoid,
+    ) {
         with_boxed_mut::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
             pipeline.draw_ellipsoid(transform, ellipsoid)
         })
@@ -146,13 +144,9 @@ pub mod ffi {
 
     #[no_mangle]
     pub extern "C" fn surface_pipeline_encode(pipeline_ptr: *mut c_void, encoder_ptr: *mut c_void) {
-        let encoder = unsafe {
-            RenderCommandEncoderRef::from_ptr(encoder_ptr.cast())
-        };
+        let encoder = unsafe { RenderCommandEncoderRef::from_ptr(encoder_ptr.cast()) };
 
-        with_boxed::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| {
-            pipeline.encode(encoder)
-        })
+        with_boxed::<SurfacePipeline, _, _>(pipeline_ptr, |pipeline| pipeline.encode(encoder))
     }
 }
 
@@ -165,17 +159,17 @@ const MAX_INSTANCE_COUNT: usize = 100000;
 const SHADER_LIBRARY: &[u8] = include_bytes!("surfaces.metallib");
 
 const PIPELINE_DEPTH_FORMAT: MTLPixelFormat = MTLPixelFormat::Depth32Float;
-const PIPELINE_PIXEL_FORMAT: MTLPixelFormat = MTLPixelFormat::RGBA8Unorm;
+const PIPELINE_PIXEL_FORMAT: MTLPixelFormat = MTLPixelFormat::BGRA8Unorm_sRGB;
 
-// buffer 0 is the uniform buffer
-const PIPELINE_VERTEX_BUFFER: NSUInteger = 1;
-const PIPELINE_INSTANCE_BUFFER: NSUInteger = 2;
+// buffer 10 is the uniform buffer
+const PIPELINE_VERTEX_BUFFER: NSUInteger = 11;
+const PIPELINE_INSTANCE_BUFFER: NSUInteger = 12;
 
 #[repr(C)]
 struct Instance {
     center: [f32; 3],
     normal: [f32; 3],
-    radius: f32
+    radius: f32,
 }
 
 type Vertex = [f32; 3];
@@ -193,11 +187,15 @@ struct SurfacePipeline {
 
     surface: RenderSurface,
     sampler: ImplicitSampler<MAX_INSTANCE_COUNT>,
-    sample_resolution: f32
+    sample_resolution: f32,
 }
 
 impl SurfacePipeline {
-    fn attribute(buffer: NSUInteger, offset: NSUInteger, format: MTLVertexFormat) -> VertexAttributeDescriptor {
+    fn attribute(
+        buffer: NSUInteger,
+        offset: NSUInteger,
+        format: MTLVertexFormat,
+    ) -> VertexAttributeDescriptor {
         let vad = VertexAttributeDescriptor::new();
         vad.set_buffer_index(buffer);
         vad.set_offset(offset);
@@ -221,6 +219,7 @@ impl SurfacePipeline {
         pipeline_descriptor.set_vertex_function(Some(&vertex_function));
         pipeline_descriptor.set_fragment_function(Some(&frag_function));
         pipeline_descriptor.set_depth_attachment_pixel_format(PIPELINE_DEPTH_FORMAT);
+        pipeline_descriptor.set_raster_sample_count(4);
         pipeline_descriptor
             .color_attachments()
             .object_at(0)
@@ -236,30 +235,50 @@ impl SurfacePipeline {
         let mut attribute_i: NSUInteger = 0;
 
         // position
-        attributes.set_object_at(attribute_i, Some(&SurfacePipeline::attribute(
-            PIPELINE_VERTEX_BUFFER, vertex_offset, MTLVertexFormat::Float3,
-        )));
+        attributes.set_object_at(
+            attribute_i,
+            Some(&SurfacePipeline::attribute(
+                PIPELINE_VERTEX_BUFFER,
+                vertex_offset,
+                MTLVertexFormat::Float3,
+            )),
+        );
         // vertex_offset += size_of::<[f32; 3]>() as NSUInteger;
         attribute_i += 1;
 
         // center
-        attributes.set_object_at(attribute_i, Some(&SurfacePipeline::attribute(
-            PIPELINE_INSTANCE_BUFFER, instance_offset, MTLVertexFormat::Float3,
-        )));
+        attributes.set_object_at(
+            attribute_i,
+            Some(&SurfacePipeline::attribute(
+                PIPELINE_INSTANCE_BUFFER,
+                instance_offset,
+                MTLVertexFormat::Float3,
+            )),
+        );
         instance_offset += size_of::<[f32; 3]>() as NSUInteger;
         attribute_i += 1;
 
         // color
-        attributes.set_object_at(attribute_i, Some(&SurfacePipeline::attribute(
-            PIPELINE_INSTANCE_BUFFER, instance_offset, MTLVertexFormat::Float3,
-        )));
+        attributes.set_object_at(
+            attribute_i,
+            Some(&SurfacePipeline::attribute(
+                PIPELINE_INSTANCE_BUFFER,
+                instance_offset,
+                MTLVertexFormat::Float3,
+            )),
+        );
         instance_offset += size_of::<[f32; 3]>() as NSUInteger;
         attribute_i += 1;
 
         // radius
-        attributes.set_object_at(attribute_i, Some(&SurfacePipeline::attribute(
-            PIPELINE_INSTANCE_BUFFER, instance_offset, MTLVertexFormat::Float,
-        )));
+        attributes.set_object_at(
+            attribute_i,
+            Some(&SurfacePipeline::attribute(
+                PIPELINE_INSTANCE_BUFFER,
+                instance_offset,
+                MTLVertexFormat::Float,
+            )),
+        );
         // instance_offset += size_of::<[f32; 1]>() as NSUInteger;
         // attribute_i += 1;
 
@@ -302,13 +321,15 @@ impl SurfacePipeline {
                 let fi = i as f32;
                 let fj = j as f32;
 
-                let vertex = |i: f32, j: f32| [
-                    (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).cos()
-                        * (deg2rad * (360.0 * j / slices)).sin(),
-                    (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).sin(),
-                    (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).cos()
-                        * (deg2rad * (360.0 * j / slices)).cos(),
-                ];
+                let vertex = |i: f32, j: f32| {
+                    [
+                        (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).cos()
+                            * (deg2rad * (360.0 * j / slices)).sin(),
+                        (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).sin(),
+                        (deg2rad * (270.0 + (180.0 / (rings + 1.0)) * i)).cos()
+                            * (deg2rad * (360.0 * j / slices)).cos(),
+                    ]
+                };
 
                 let idx = ((slices as i32 * 6 * i) + (j * 6)) as usize;
 
@@ -343,7 +364,7 @@ impl SurfacePipeline {
     }
 
     pub fn begin(&mut self) {
-    //     Prepare for surface to be refreshed
+        //     Prepare for surface to be refreshed
         self.surface.clear();
         self.instance_count = 0
     }
@@ -371,7 +392,7 @@ impl SurfacePipeline {
 
         let start = Instant::now();
         self.update_surface_samples();
-        let sampling_elapsed= start.elapsed();
+        let sampling_elapsed = start.elapsed();
         dbg!(sampling_elapsed);
     }
 
